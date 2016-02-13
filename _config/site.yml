@@ -4,7 +4,7 @@ org: University at Albany and NYS Department of State
 base_url: ''
 profiles:
   production:
-    base_url: http://digital-local-laws.github.io
+    base_url: https://digital-local-laws.github.io
     deploy:
       host: github_pages
       branch: master
