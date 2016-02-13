@@ -288,7 +288,7 @@ Advantages:
 
 Challenges:
 
-* incomplete implementation
+* is incomplete implementation
 * "`from scratch`" approach means deployment and scaling may be more difficult
 
 ==== Wrapper Around Existing Platform
