@@ -1,0 +1,318 @@
+== Project Background
+
+=== Concept
+
+New York State contains over 1,600 general purpose local governments counties, towns, villages, and cities.
+Each local government has authority to adopt its own laws on a wide array of subjects.
+In 2014, more than 4,200 local laws were adopted.
+Local governments have long been required to submit their laws to the Department of State (DOS), and they currently must do so by a paper-based process.
+Each time a law is adopted, an official specified by statute must complete a certification form, prepare the law in print format that follows certain formal requirements, and mail that form to the Division of Corporations, State Records, and UCC at DOS (State Records).
+State Records must then manually verify the submitted document meets formal requirements, scan the document, and file it.
+State Records stores the scanned copy in an enterprise content management system that performs optical character recognition and some indexing of the document's contents.
+<<high_level_law>> illustrates this process at a high level.
+State Records has authority to provide for electronic transmission as an alternative to the paper-based process, but has not implemented such a solution.
+
+.High Level Model of Local Legislative Process in New York State
+[graphviz,high_level_law,svg]
+....
+digraph
+{
+  draft [label="Draft Law"];
+  proposed [label="Proposed Law"];
+  adopted [label="Adopted Law"];
+  submitted [label="Submitted Law"];
+  draft -> proposed;
+  proposed -> adopted;
+  adopted -> submitted;
+}
+....
+
+This project seeks to prototype such a solution using technology developed to manage computer source code and publish books online.
+The idea is inspired both others' observations that http://seanmcgrath.blogspot.com/2010/06/kliss-law-as-source-code.html[law is like source code] and https://www.ted.com/talks/clay_shirky_how_the_internet_will_one_day_transform_government?language=en[should be developed more like source code] using distributed revision control tools.
+<<high_level_code>> depicts how such tools are used to develop software and <<high_level_publication>> depicts how such tools are also used to publish books, technical documentation, and other publications.
+
+.High Level Diagram of Continuous Delivery for a Computer Software Application
+[graphviz,high_level_code,svg]
+....
+digraph
+{
+  rankdir="LR";
+
+  node [ fontname="Arial" ];
+
+  Design->Develop;
+
+  { rank="same"; Develop->Test; }
+
+  Deploy->Test [dir="back"];
+
+  { rank="same"; Design->Deploy [dir="back"]; }
+}
+....
+
+.High Level Diagram of Continuous Delivery for a Publication
+[graphviz,high_level_publication,svg,width=80%]
+....
+digraph
+{
+  rankdir="LR";
+
+  node [ fontname="Arial" ];
+
+  Author->Share;
+
+  { rank="same"; Share->Validate; }
+
+  Publish->Validate [dir="back"];
+
+  { rank="same"; Author->Publish [dir="back"]; }
+}
+....
+
+Compared with legislators, coders can:
+
+* Know every change, who made it, and why.
+Revision control enables line by line reporting of the history of every file.
+* Track changes across multiple, interrelated files.
+Revision control takes a snapshot of a collection of files and stores it in a repository that is separate from the files themselves.  So any content -- text, pictures, video -- can be tracked over time as it changes.
+* Share and accept contributions without sacrificing control.
+Revision control enables the coder to share the code in a way where others can make their own copy, improve it, and submit their improvements back to the author.
+The author always retains control over when or if those changes are accepted in his or her own copy.
+* Access any past version that was ever shared.
+The repository, which contains the history of changes to the collection of documents, is checked out by each contributor.
+So everyone is able to compare and share with any previously shared version.
+* Run "`builds`" to make internally consistent "`products`" from any version.
+Coders largely automated the tasks that move from the source code they right to the software they deploy.
+Continuous integration platforms enable each iteration of sharing to automatically trigger testing and releasing new versions of software.
+This enables coders to respond quickly to problems or requests for improvements.
+The same tools are also used to convert textual sources of books into printable PDF, ereader EPUB, and web HTML editions.
+
+Preliminary conversations with municipal clerks and attorneys have highlighted three capabilities of great potential value:
+
+* instant, automated validation and acceptance of new laws
+* public, searchable, statewide database of local government policy across 1,600 jurisdictions
+* secure record of all changes made, who made them, and why
+
+This project starts with an assumption that continuous delivery could be adapted to support the submission process, and possibly even the drafting and adoption process for local laws.
+<<high_level_git_law>> depicts the process at a high level.
+<<detailed_git_law>> depicts the process at a more detailed level as described in  https://www.dos.ny.gov/lg/publications/Adopting_Local_Laws_in_New_York_State.pdf[Adopting Local Laws in New York State].
+
+[graphviz,high_level_git_law,svg,width=80%]
+.High Level Diagram of Continuous Delivery for Local Laws
+....
+digraph
+{
+  rankdir="LR";
+
+  node [ fontname="Arial" ];
+
+  Draft->Proposed [label="share"];
+
+  { rank="same"; Proposed->Adopted [label="validate"]; }
+
+  Published->Adopted [dir="back",label="publish"];
+
+  { rank="same"; Draft->Published [dir="back",label="design"]; }
+}
+....
+
+.Detailed Diagram of Business Process for Local Laws in New York State with Continuous Delivery
+[graphviz,detailed_git_law,svg]
+....
+digraph local_law {
+  fail [label="Proposal Fails",shape="Msquare"];
+  final [label="Final Adoption",shape="Mcircle"];
+  subgraph cluster_legislator {
+    label="Legislator";
+    start [label="Idea for Law",shape="Mdiamond"];
+  }
+  subgraph cluster_chair {
+    label="Legislative Body Chair";
+    assign_committee [label="Committee Assignment?",shape="diamond"]
+  }
+  subgraph cluster_committee {
+    label="Committee";
+    amend_proposal [label="Amend?",shape="diamond"];
+    vote_committee [label="Vote on Proposal",shape="rectangle"];
+    adopt_committee [label="Adopted?",shape="diamond"];
+    report_legislature [label="Report to Legislature",shape="rectangle"];
+  }
+  subgraph cluster_legislature {
+    label="Legislative Body";
+    waiting_period [label="7 Day Waiting Period",shape="rectangle"];
+    public_hearing [label="Hold Public Hearing",shape="rectangle"];
+    amend_legislature [label="Amend?",shape="diamond"];
+    vote_legislature [label="Legislature Votes",shape="rectangle"];
+    adopt_legislature [label="Adopted?",shape="diamond"];
+    override [label="Override?",shape="diamond"];
+  }
+  executive_review [label="Executive Veto Authority?",shape="diamond"];
+  subject_to_referendum [label="Mandatory Referendum?",shape="diamond"];
+  subject_to_permissive_referendum [label="Permissive Referendum?",shape="diamond"];
+  subgraph cluster_executive {
+    label="Executive";
+    emergency_message [label="Emergency Message?",shape="diamond"];
+    review_executive [label="Vetoes?",shape="diamond"];
+  }
+  subgraph cluster_referendum {
+    label="Voters"
+    permissive_referendum_period [label="45 Day Waiting Period",shape="rectangle"];
+    petition_received [label="Petition Received?",shape="diamond"];
+    referendum [label="Conduct Referendum",shape="rectangle"];
+    referendum_result [label="Approved?",shape="diamond"];
+  }
+  subgraph cluster_attorney {
+    label="Municipal Attorney";
+    node [color="#AAAAFF",style="filled"]
+    write_draft [label="Write Draft",shape="rectangle"]
+    record_amendment [label="Record Amendment",shape="rectangle"]
+  }
+  subgraph cluster_proposed_branch {
+    label="Public Proposed Law Branch";
+    color="#AAAAFF";
+    style=filled;
+    proposal [label="Proposed Law",shape="parallelogram"];
+  }
+  subgraph cluster_clerk {
+    label="Legislative Clerk";
+    node [style=filled,color="#AAFFAA"]
+    submit [label="Certify and Submit",shape="rectangle"];
+    receipt [label="Receipt",shape="parallelogram"];
+    file_receipt [label="File Receipt",shape="rectangle"];
+  }
+  subgraph cluster_adopted_branch {
+    label="Adopted Branch"
+    color="#AAFFAA"
+    style=filled
+    final_adopted [label="Final Adopted Law",shape="parallelogram"];
+    merge_request [label="Generate Merge Request",shape="rectangle"];
+  }
+  subgraph cluster_official_branch {
+    label="Official Law Branch";
+    color="#FFFFAA"
+    style=filled
+    validate_state [label="Validate Request",shape="rectangle"];
+    valid_submission [label="Valid Submission",shape="diamond"];
+    current_law [label="Current Law",shape="parallelogram"];
+    publish [label="Publish New Law",shape="rectangle"];
+    ecm [label="Published Expressions",shape="parallelogram"];
+    send_receipt [label="Acknowledge Success",shape="rectangle"];
+    fail_submission [label="Notify User of Failure",shape="rectangle"];
+    execute_merge [label="Merge in Adopted Law",shape="rectangle"];
+    validate_state -> valid_submission [color="green"];
+    valid_submission -> execute_merge [label="Yes", color="green"];
+    execute_merge -> publish [color="green"];
+  }
+  start -> write_draft [color="green"];
+  write_draft -> proposal;
+  proposal -> current_law [dir="back",color="green",label="clone/branch"];
+  write_draft -> assign_committee [color="green"];
+  assign_committee -> amend_proposal [label="Yes"];
+  assign_committee -> emergency_message [label="No"];
+  amend_proposal -> record_amendment [label="Yes"];
+  amend_proposal -> vote_committee [label="No", color="green"];
+  record_amendment -> proposal;
+  proposal -> amend_proposal;
+  proposal -> amend_legislature;
+  vote_committee -> adopt_committee [color="green"];
+  adopt_committee -> report_legislature [label="Yes",color="green"];
+  adopt_committee -> fail [label="No (Tabled)",color="red"];
+  report_legislature -> emergency_message;
+  emergency_message -> waiting_period [label="No"];
+  waiting_period -> public_hearing;
+  emergency_message -> public_hearing [label="Yes"];
+  public_hearing -> amend_legislature;
+  amend_legislature -> record_amendment [label="Yes"];
+  amend_legislature -> vote_legislature [label="No", color="green"];
+  vote_legislature -> adopt_legislature [color="green"];
+  adopt_legislature -> executive_review [label="Yes", color="green"];
+  adopt_legislature -> fail [label="No", color="red"];
+  executive_review -> review_executive [label="Yes"];
+  review_executive -> subject_to_referendum [label="No"];
+  review_executive -> override [label="Yes"];
+  override -> subject_to_referendum [label="Yes"];
+  override -> fail [label="No", color="red"];
+  executive_review -> subject_to_referendum [label="No"];
+  subject_to_referendum -> subject_to_permissive_referendum [label="No"];
+  subject_to_permissive_referendum -> permissive_referendum_period [label="Yes"];
+  permissive_referendum_period -> petition_received;
+  petition_received -> referendum [label="Yes"];
+  petition_received -> final [label="No"];
+  subject_to_permissive_referendum -> final [label="No"];
+  subject_to_referendum -> referendum [label="Yes"];
+  referendum -> referendum_result;
+  referendum_result -> fail [label="No",color="red"];
+  referendum_result -> final [label="Yes"];
+  final -> submit [color="green"];
+  proposal -> final_adopted [label="branch",color="green"];
+  submit -> final_adopted [color="green"];
+  final_adopted -> merge_request [color="green"];
+  merge_request -> validate_state [color="green"];
+  valid_submission -> fail_submission [label="No"];
+  fail_submission -> submit;
+  publish -> ecm [color="green"];
+  publish -> send_receipt [color="green"];
+  send_receipt -> receipt [color="green"];
+  receipt -> file_receipt [color="green"];
+  current_law -> execute_merge [dir="back",color="green"];
+}
+....
+
+=== Contribution Guidelines for Project
+
+1. Development will be open source and on GitHub to maximize opportunity for collaboration.
+2. Process will be agile with frequent releases to assure design meets needs and avoid waste.
+3. Every new feature should be accompanied by a comprehensive suite of unit and integration tests following behavior-driven development practices.
+4. Every contribution should be submitted as a pull request to assure at least one other contributor reviews and understands the contribution.
+5. As much as possible the platform should leverage existing open source components or well-documented API's.
+
+=== Implementation Strategies
+
+==== New Platform
+
+A new platform was started specifically with this project in mind.
+It was written in the Ruby on Rails web application development framework.
+The front-end interface is AngularJS.
+
+Advantages:
+
+* intuitive interface
+* illustrates basic submission process
+* is accompanied by a suite of tests and libraries that should be easy to extend
+
+Challenges:
+
+* incomplete implementation
+* "`from scratch`" approach means deployment and scaling may be more difficult
+
+==== Wrapper Around Existing Platform
+
+Instead of developing a new platform, the project could utilize an existing continuous delivery platform like GitHub or GitLab and build a user experience appropriate for municipal clerks and attorneys that uses these platforms' robust API as the backend.
+
+Advantages:
+
+* scalability
+* extensive functionality and reporting capabilities already available
+* potential for external support for the system
+
+Disadvantages:
+
+* as-is these platforms do not provide a user experience that is intuitive for users
+
+==== Adapt Another Platform
+
+Besides GitLab, a variety of open source platforms potentially pertinent to this project exist.
+
+* Indigo Platform is a legal publishing and consolidation platform developed by Code for South Africa.
+** Advantages:
+*** Offers good editing tools for preparing and filing a law.
+*** Offers good framework for processing laws in other formats (PDF, Word) and converting them to interoperable, law-friendly forms.
+*** Well documented and accompanied by a good suite of tests.
+*** Supported by a team with intentions of expanding functionality to provide enhanced legal publishing service.
+** Disadvantages:
+*** Backend is not distributed revision control.
+*** Not a framework for end-to-end support of legislative process.
+
+=== Initial Approach
+
+Team should examine the existing platform and evaluate whether it could be adapted to wrap around an API.
