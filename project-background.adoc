@@ -13,8 +13,8 @@ State Records stores the scanned copy in an enterprise content management system
 <<high_level_law>> illustrates this process at a high level.
 State Records has authority to provide for electronic transmission as an alternative to the paper-based process, but has not implemented such a solution.
 
-[[high_level_law]]
 .High Level Model of Local Legislative Process in New York State
+[[high_level_law]]
 [graphviz,high_level_law,svg]
 ....
 digraph
