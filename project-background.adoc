@@ -3,6 +3,7 @@ layout: base
 ---
 [[project_background]]
 == Project Background
+:toc:
 
 === Concept
 
