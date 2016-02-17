@@ -287,7 +287,7 @@ it is assumed that most municipalities will use the system primarily or exclusiv
 [[general_pattern]]
 .General Pattern for Developing and Submitting Laws with Git
 [graphviz,general_pattern,svg]
-----
+....
 digraph G {
   subgraph cluster_0 {
     label="Canonical Repository (public, state-hosted)"
@@ -312,7 +312,7 @@ digraph G {
     clerk_master -> proposed_master [label="push (publish changes)"]
   }
 }
-----
+....
 
 ==== New Platform
 
