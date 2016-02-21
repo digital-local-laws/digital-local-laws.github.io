@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>An awesome site</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <style>
+      body {
+        padding-top: 60px;
+      }
+    </style>
+    <link href="https://digital-local-laws.github.io/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="https://digital-local-laws.github.io">Digital Local Laws</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="https://digital-local-laws.github.io">Home</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="sect1">
+      <h2 id="expressing_laws_in_asciidoctor">Expressing Laws in AsciiDoctor</h2>
+      <div class="sectionbody">
+      <div class="sect2">
+      <h3 id="_summary">Summary</h3>
+      <div class="paragraph">
+      <p>The purpose of this document is to describe how local laws will be expressed in Asciidoctor.
+      It assumes that the body of law for each jurisdiction will reside in a discrete repository.</p>
+      </div>
+      </div>
+      <div class="sect2">
+      <h3 id="_terms">Terms</h3>
+      <div class="sect3">
+      <h4 id="_legal_concepts">Legal Concepts</h4>
+      <div class="dlist">
+      <dl>
+      <dt class="hdlist1">chronological expression</dt>
+      <dd>
+      <p>An expression of a specific local law at a point in time.
+      Local governments are required to express and submit their laws in this form to DOS.
+      This is generally what government officials call a "local law".</p>
+      </dd>
+      <dt class="hdlist1">DOS</dt>
+      <dd>
+      <p>The New York State Department of State.
+      Local governments are required to file laws with this agency before they may take effect.</p>
+      </dd>
+      <dt class="hdlist1">codified expression</dt>
+      <dd>
+      <p>Any formal compilation of multiple local laws.
+      Local governments are not required to codify their laws, but many do to simplify research and make the body of law easier to understand.
+      Municipal Home Rule Law &sect; 27(6) requires the local official who is responsible for filing local laws to maintain &#8220;a separate book or books, which shall be indexed&#8221;.
+      Such a book or collection of books is effectively one codified expression.</p>
+      </dd>
+      </dl>
+      </div>
+      </div>
+      <div class="sect3">
+      <h4 id="_technical_concepts">Technical Concepts</h4>
+      <div class="dlist">
+      <dl>
+      <dt class="hdlist1">repository root</dt>
+      <dd>
+      <p>The root directory of the repository containing the body of law for a jurisdiction.</p>
+      </dd>
+      <dt class="hdlist1">repository node</dt>
+      <dd>
+      <p>A repository node expresses a structural part of the law within the repository.</p>
+      </dd>
+      <dt class="hdlist1">root node</dt>
+      <dd>
+      <p>A node that resides in the repository root.</p>
+      </dd>
+      </dl>
+      </div>
+      </div>
+      </div>
+      <div class="sect2">
+      <h3 id="_repository_nodes">Repository Nodes</h3>
+      <div class="paragraph">
+      <p>This section describes how repository nodes are structured in various platforms in development.</p>
+      </div>
+      <div class="sect3">
+      <h4 id="_gitlaw_platform">GitLaw Platform</h4>
+      <div class="paragraph">
+      <p>A node is represented by a <code>name.json</code> file, where name is the name of the node.
+      Metadata are formatedd in JavaScript Object Notation (JSON).
+      If the section has text, it is contained in an accompanying <code>name.adoc</code> file.
+      If the section contains sub-units, they can either be included within the <code>name.adoc</code> file or a folder <code>name</code> containing nodes representing each subunit.</p>
+      </div>
+      </div>
+      <div class="sect3">
+      <h4 id="_legalasciidoctor_platform">LegalAsciiDoctor Platform</h4>
+      <div class="paragraph">
+      <p>A node is represented by a <code>name.adoc</code> file, where name is the name of the node.
+      Metadata are contained in the front-matter of the file.
+      Metadata are formatted in Yet Another Markup Language (YAML).
+      If the section has text, it is contained in the body of the file after the front-matter.
+      If the section contains sub-units, they can either be included in the body or in a folder <code>name</code> containing nodes representing each subunit.</p>
+      </div>
+      </div>
+      <div class="sect3">
+      <h4 id="_metadata_elements">Metadata Elements</h4>
+      <div class="paragraph">
+      <p>Metadata are organized in a Hash structure.</p>
+      </div>
+      <table id="node_attributes" class="tableblock frame-all grid-all spread">
+      <caption class="title">Table 1. Attributes of Nodes</caption>
+      <colgroup>
+      <col style="width: 25%;">
+      <col style="width: 25%;">
+      <col style="width: 25%;">
+      <col style="width: 25%;">
+      </colgroup>
+      <thead>
+      <tr>
+      <th class="tableblock halign-left valign-top">Key</th>
+      <th class="tableblock halign-left valign-top">Format</th>
+      <th class="tableblock halign-left valign-top">Purpose</th>
+      <th class="tableblock halign-left valign-top">Optional</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">structure</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">array of hashes</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">Hierarchy of node types allowed under this node.
+      See <a href="#structure_attributes">Attributes of Structure Definitions</a>.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">type</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">The type of the node, which should correspond to a <code>label</code> in the structure
+      specified by its parent node.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">The title for the node.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">integer</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">The numerical identifier for the node.
+      This is always stored as an integer, even if it will be rendered in a different format.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+      </tr>
+      </tbody>
+      </table>
+      <div class="paragraph">
+      <p>The structure attribute, if provided contains hashes representing in each level of the hierarchy, starting with the immediate children of the node.</p>
+      </div>
+      <table id="structure_attributes" class="tableblock frame-all grid-all spread">
+      <caption class="title">Table 2. Attributes of Structure Definitions</caption>
+      <colgroup>
+      <col style="width: 10%;">
+      <col style="width: 10%;">
+      <col style="width: 70%;">
+      <col style="width: 10%;">
+      </colgroup>
+      <thead>
+      <tr>
+      <th class="tableblock halign-left valign-top">Key</th>
+      <th class="tableblock halign-left valign-top">Format</th>
+      <th class="tableblock halign-left valign-top">Purpose</th>
+      <th class="tableblock halign-left valign-top">Optional</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">label</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">Label for the type of node at this level.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">character</p></td>
+      <td class="tableblock halign-left valign-top"><div><div class="paragraph">
+      <p>Specifies how numbers for sections at this level should be realized</p>
+      </div>
+      <div class="dlist">
+      <dl>
+      <dt class="hdlist1">R</dt>
+      <dd>
+      <p>Upper case Roman numerals</p>
+      </dd>
+      <dt class="hdlist1">r</dt>
+      <dd>
+      <p>Lower case Roman numerals</p>
+      </dd>
+      <dt class="hdlist1">A</dt>
+      <dd>
+      <p>Upper case alphabetical numbers</p>
+      </dd>
+      <dt class="hdlist1">a</dt>
+      <dd>
+      <p>Lower case alphabetical numbers</p>
+      </dd>
+      <dt class="hdlist1">1</dt>
+      <dd>
+      <p>Arabic numerals</p>
+      </dd>
+      <dt class="hdlist1">n</dt>
+      <dd>
+      <p>No numbering</p>
+      </dd>
+      </dl>
+      </div></div></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">optional</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">True if nodes of this type must always be included in the hierarchy.
+      False if they are sometimes omitted.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">text</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">True if node can have textual content.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+      </tr>
+      <tr>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">True if node can have a textual title.</p></td>
+      <td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+      </tr>
+      </tbody>
+      </table>
+      <div class="paragraph">
+      <p>Root nodes have a type of <code>code</code> and are not numbered.
+      These should represent the book or books into which the municipality organizes its laws.</p>
+      </div>
+      </div>
+      </div>
+      <div class="sect2">
+      <h3 id="_chronological_expression">Chronological Expression</h3>
+      <div class="paragraph">
+      <p>This section describes how chronological expressions should be rendered in a repository.</p>
+      </div>
+      <div class="sect3">
+      <h4 id="_codification_by_default">Codification by Default</h4>
+      <div class="paragraph">
+      <p>Chronological expressions are organized in a convention that effectively forms a codification by default.
+      These expressions will reside under a root node <code>laws</code>.
+      The <code>laws</code> node contains a child node for each year in which a law was adopted.
+      For example, the <code>2014</code> node would contain all laws adopted in 2014 for the jurisdiction.
+      Each year node contains a node for each law adopted in that year.
+      The name of the node would be the number of the law adopted in the year.
+      For example, Local Law No. 5 of 2014 would be in a node named <code>law-05</code> within the <code>2014</code> node.</p>
+      </div>
+      </div>
+      <div class="sect3">
+      <h4 id="_chronological_expression_of_each_law">Chronological Expression of Each Law</h4>
+      <div class="paragraph">
+      <p>Local governments have few constraints in how the structure the content of the law.
+      Each law could be broken down into a structure of multiple nodes or it could be contained in a single node.
+      In general, laws are short and simple enough that they can be contained in a single node.
+      This will be the preferred practice.</p>
+      </div>
+      <div class="paragraph">
+      <p>The law must start with an enactment clause.</p>
+      </div>
+      <div class="listingblock">
+      <div class="content">
+      <pre class="highlight"><code>[[enactment_clause]]&#x000A;Be it enacted by the &lt;legislative body&gt; of the &lt;type&gt; of &lt;jurisdiction_name&gt; as follows:</code></pre>
+      </div>
+      </div>
+      <div class="paragraph">
+      <p>The law must end with a certification statement.</p>
+      </div>
+      <div class="listingblock">
+      <div class="content">
+      <pre class="highlight"><code>[[certification]]&#x000A;&lt;text determined by municipality&gt;</code></pre>
+      </div>
+      </div>
+      <div class="paragraph">
+      <p>The content in between these statements is considered the text of the law.</p>
+      </div>
+      </div>
+      <div class="sect3">
+      <h4 id="_local_laws_that_modify_a_codification">Local Laws That Modify a Codification</h4>
+      <div class="paragraph">
+      <p>Text that resides in a <a href="#codified_expression">codified expression</a> should not be included directly in the law.
+      Instead it should reside in the codified expression.
+      A child asset of the node called <code>diff.adoc</code> should describe how the text of the codification is altered.
+      This file will consist of a series of statements, such as this:</p>
+      </div>
+      <div class="listingblock">
+      <div class="content">
+      <pre class="highlight"><code>[[amendment_instruction]]&#x000A;Chapter 5, Section 1 of the Administrative Code created by Local Law 5 of 2002&#x000A;and amended by Local Law 2 of 2008 is amended to read as follows:&#x000A;&#x000A;Unresolved directive in expressing-laws-in-asciidoctor.adoc - include::administrative-code/chapter-5/section-1.adoc[]&#x000A;&#x000A;...</code></pre>
+      </div>
+      </div>
+      <div class="paragraph">
+      <p>This can be generated automatically using a diff tool that compares the adopted law version to the current version to which it will be applied.
+      The diff should use include statements to include the text from the codified expression where it resides.
+      The diff itself can be included in the text of the law by reference.</p>
+      </div>
+      </div>
+      </div>
+      <div class="sect2">
+      <h3 id="_proposed_law">Proposed Law</h3>
+      <div class="paragraph">
+      <p>Before a proposed law is adopted, it cannot be assigned to the <code>laws</code> node.
+      Instead, it should reside in a special root node named <code>proposed</code>.
+      On adoption this node will be moved to the appropriate place in the <code>laws</code> node hierarchy.</p>
+      </div>
+      </div>
+      <div class="sect2">
+      <h3 id="codified_expression">Codified Expression</h3>
+      <div class="paragraph">
+      <p>Elements of the law may be organized into one or more codified expressions.
+      Each book should be contained in a hierarchy under a root node.
+      For example the "Administrative Code" of a municipality might be in a root node named <code>administrative-code</code>.</p>
+      </div>
+      </div>
+      </div>
+      </div>
+      <hr>
+      <footer>
+        <p>Digital Local Laws Project 2016</p>
+      </footer>
+    </div>
+  </body>
+</html>
