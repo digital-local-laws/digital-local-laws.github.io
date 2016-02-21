@@ -183,6 +183,34 @@ The law must end with a certification statement.
 
 The content in between these statements is considered the text of the law.
 
+==== Local Laws That Modify a Codification
+
+Text that resides in a <<codified_expression,codified expression>> should not be included directly in the law.
+Instead it should reside in the codified expression.
+A child asset of the node called `diff.adoc` should describe how the text of the codification is altered.
+This file will consist of a series of statements, such as this:
+
+```
+[[amendment_instruction]]
+Chapter 5, Section 1 of the Administrative Code created by Local Law 5 of 2002
+and amended by Local Law 2 of 2008 is amended to read as follows:
+
+include::administrative-code/chapter-5/section-1.adoc[]
+
+...
+```
+
+This can be generated automatically using a diff tool that compares the adopted law version to the current version to which it will be applied.
+The diff should use include statements to include the text from the codified expression where it resides.
+The diff itself can be included in the text of the law by reference.
+
+=== Proposed Law
+
+Before a proposed law is adopted, it cannot be assigned to the `laws` node.
+Instead, it should reside in a special root node named `proposed`.
+On adoption this node will be moved to the appropriate place in the `laws` node hierarchy.
+
+[[codified_expression]]
 === Codified Expression
 
 Elements of the law may be organized into one or more codified expressions.
