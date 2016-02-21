@@ -1,0 +1,190 @@
+---
+layout: base
+---
+[[expressing_laws_in_asciidoctor]]
+== Expressing Laws in AsciiDoctor
+:toc:
+
+=== Summary
+
+The purpose of this document is to describe how local laws will be expressed in Asciidoctor.
+It assumes that the body of law for each jurisdiction will reside in a discrete repository.
+
+=== Terms
+
+==== Legal Concepts
+
+chronological expression::
+An expression of a specific local law at a point in time.
+Local governments are required to express and submit their laws in this form to DOS.
+This is generally what government officials call a "local law".
+DOS::
+The New York State Department of State.
+Local governments are required to file laws with this agency before they may take effect.
+codified expression::
+Any formal compilation of multiple local laws.
+Local governments are not required to codify their laws, but many do to simplify research and make the body of law easier to understand.
+Municipal Home Rule Law &sect; 27(6) requires the local official who is responsible for filing local laws to maintain "`a separate book or books, which shall be indexed`".
+Such a book or collection of books is effectively one codified expression.
+
+==== Technical Concepts
+
+repository root::
+The root directory of the repository containing the body of law for a jurisdiction.
+repository node::
+A repository node expresses a structural part of the law within the repository.
+root node::
+A node that resides in the repository root.
+
+=== Repository Nodes
+
+This section describes how repository nodes are structured in various platforms in development.
+
+==== GitLaw Platform
+
+A node is represented by a `name.json` file, where name is the name of the node.
+Metadata are formatedd in JavaScript Object Notation (JSON).
+If the section has text, it is contained in an accompanying `name.adoc` file.
+If the section contains sub-units, they can either be included within the `name.adoc` file or a folder `name` containing nodes representing each subunit.
+
+==== LegalAsciiDoctor Platform
+
+A node is represented by a `name.adoc` file, where name is the name of the node.
+Metadata are contained in the front-matter of the file.
+Metadata are formatted in Yet Another Markup Language (YAML).
+If the section has text, it is contained in the body of the file after the front-matter.
+If the section contains sub-units, they can either be included in the body or in a folder `name` containing nodes representing each subunit.
+
+==== Metadata Elements
+
+Metadata are organized in a Hash structure.
+
+[[node_attributes]]
+.Attributes of Nodes
+[cols="4",options="header"]
+|===
+|Key
+|Format
+|Purpose
+|Optional
+
+|structure
+|array of hashes
+|Hierarchy of node types allowed under this node.
+See <<structure_attributes>>.
+|no
+
+|type
+|string
+|The type of the node, which should correspond to a `label` in the structure
+specified by its parent node.
+|yes
+
+|title
+|string
+|The title for the node.
+|no
+
+|number
+|integer
+|The numerical identifier for the node.
+This is always stored as an integer, even if it will be rendered in a different format.
+|no
+|===
+
+The structure attribute, if provided contains hashes representing in each level of the hierarchy, starting with the immediate children of the node.
+
+[[structure_attributes]]
+.Attributes of Structure Definitions
+[cols="1,1,7,1",options="header"]
+|===
+|Key
+|Format
+|Purpose
+|Optional
+
+|label
+|string
+|Label for the type of node at this level.
+|yes
+
+|number
+|character
+a|Specifies how numbers for sections at this level should be realized
+
+R::
+Upper case Roman numerals
+r::
+Lower case Roman numerals
+A::
+Upper case alphabetical numbers
+a::
+Lower case alphabetical numbers
+1::
+Arabic numerals
+n::
+No numbering
+|yes
+
+|optional
+|boolean
+|True if nodes of this type must always be included in the hierarchy.
+False if they are sometimes omitted.
+|yes
+
+|text
+|boolean
+|True if node can have textual content.
+|yes
+
+|title
+|boolean
+|True if node can have a textual title.
+|yes
+|===
+
+Root nodes have a type of `code` and are not numbered.
+These should represent the book or books into which the municipality organizes its laws.
+
+=== Chronological Expression
+
+This section describes how chronological expressions should be rendered in a repository.
+
+==== Codification by Default
+
+Chronological expressions are organized in a convention that effectively forms a codification by default.
+These expressions will reside under a root node `laws`.
+The `laws` node contains a child node for each year in which a law was adopted.
+For example, the `2014` node would contain all laws adopted in 2014 for the jurisdiction.
+Each year node contains a node for each law adopted in that year.
+The name of the node would be the number of the law adopted in the year.
+For example, Local Law No. 5 of 2014 would be in a node named `law-05` within the `2014` node.
+
+==== Chronological Expression of Each Law
+
+Local governments have few constraints in how the structure the content of the law.
+Each law could be broken down into a structure of multiple nodes or it could be contained in a single node.
+In general, laws are short and simple enough that they can be contained in a single node.
+This will be the preferred practice.
+
+The law must start with an enactment clause.
+
+```
+[[enactment_clause]]
+Be it enacted by the <legislative body> of the <type> of <jurisdiction_name> as follows:
+```
+
+The law must end with a certification statement.
+
+```
+[[certification]]
+<text determined by municipality>
+```
+
+The content in between these statements is considered the text of the law.
+
+=== Codified Expression
+
+Elements of the law may be organized into one or more codified expressions.
+Each book should be contained in a hierarchy under a root node.
+For example the "Administrative Code" of a municipality might be in a root node named `administrative-code`.

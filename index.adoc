@@ -8,3 +8,4 @@ The project goals is to create a digital platform local governments can use to d
 The platform will provide a model implementation electronic submission of local laws.
 
 * <<project-background.adoc#project_background,Project Background>>
+* <<expressing-laws-in-asciidoctor.adoc#expresssing_laws_in_asciidoctor,Expressing Laws in Asciidoctor>>
