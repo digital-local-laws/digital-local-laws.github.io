@@ -7,5 +7,6 @@ The purpose of this site is to provide documentation of the digital local laws p
 The project goals is to create a digital platform local governments can use to draft, share, validate, submit, and publish their local laws online.
 The platform will provide a model implementation electronic submission of local laws.
 
+* link:/blog[Project Blog]
 * <<project-background.adoc#project_background,Project Background>>
 * <<expressing-laws-in-asciidoctor.adoc#expresssing_laws_in_asciidoctor,Expressing Laws in Asciidoctor>>
