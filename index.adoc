@@ -10,3 +10,4 @@ The platform will provide a model implementation electronic submission of local 
 * link:/blog[Project Blog]
 * <<project-background.adoc#project_background,Project Background>>
 * <<expressing-laws-in-asciidoctor.adoc#expresssing_laws_in_asciidoctor,Expressing Laws in Asciidoctor>>
+* link:https://github.com/digital-local-laws/git_law[Source Code]
