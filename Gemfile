@@ -28,10 +28,13 @@ gem 'awestruct', '>= 0.5.7'                               # Goes without saying
 gem 'webrick', '~> 1.3.1'                                 # The rack webserver to use in dev mode
 
 gem 'bootstrap-sass', '~> 3'
-gem 'compass', '>= 1.0.1'
+gem 'compass', '~> 1.0'
 gem 'opal'
 gem 'slim'
 gem 'asciidoctor-diagram'
+# Needed because newer versions of listen do not support slightly old
+# versions of Ruby on TravisCI
+gem 'listen', '3.1.1'
 
 # FIXME
 # gem 'rake', '>= 0.9.2'                                  # Needed for the Rakefile to work
