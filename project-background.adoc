@@ -104,6 +104,9 @@ Preliminary conversations with municipal clerks and attorneys have highlighted t
 This project starts with an assumption that continuous delivery could be adapted to support the submission process, and possibly even the drafting and adoption process for local laws.
 <<high_level_git_law>> depicts the process at a high level.
 <<detailed_git_law>> depicts the process at a more detailed level as described in  https://www.dos.ny.gov/lg/publications/Adopting_Local_Laws_in_New_York_State.pdf[Adopting Local Laws in New York State].
+<<publication_flow>> depicts how one source format in <<expressing-laws-in-asciidoctor.adoc,a legal variant of the AsciiDoctor standard>> can compile into many expressions.
+Most of the toolchain to build publications is already available open-source.
+Dashed lines indicate work that remains to be done as part of this project or related efforts in the AsciiDoctor project itself.
 
 [[high_level_git_law]]
 .High Level Diagram of Continuous Delivery for Local Laws
@@ -267,6 +270,29 @@ digraph local_law {
   current_law -> execute_merge [dir="back",color="green"];
 }
 ....
+
+[[publication_flow]]
+.Publication Products That Can Be Built Automatically from AsciiDoctor Source
+[graphviz,publication_flow,svg,width=80%]
+....
+digraph
+{
+  node [ fontname="Arial" ];
+  source [ label="Legal Asciidoctor" ];
+  adoc [ label="Generic Asciidoctor" ];
+  akoma_ntoso [ label="Akoma Ntoso XML" ];
+  uslm [ label="United States Legal Markup XML" ];
+  docbook [ label="DocBook XML" ];
+  print_pdf [ label="Print-Optimized PDF" ];
+  electronic_pdf [ label="Web-Optimized PDF" ];
+  epub [ label="EPUB3 (Apple, Google Play e-readers)" ];
+  mobi [ label="MOBI (Amazon e-reader)" ];
+  html [ label="HTML5, ADA compliant web edition" ];
+  source -> adoc [style="dashed"];
+  source -> { uslm; akoma_ntoso } [style="dashed"];
+  adoc -> { docbook; electronic_pdf; epub; mobi; html };
+  docbook -> print_pdf;
+}
 
 === Contribution Guidelines for Project
 
