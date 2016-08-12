@@ -40,14 +40,10 @@ A node that resides in the repository root.
 
 This section describes how repository nodes are structured in various platforms in development.
 
-==== GitLaw Platform
+==== GitLaw and LegalAsciiDoctor Platform
 
-A node is represented by a `name.json` file, where name is the name of the node.
-Metadata are formatedd in JavaScript Object Notation (JSON).
-If the section has text, it is contained in an accompanying `name.adoc` file.
-If the section contains sub-units, they can either be included within the `name.adoc` file or a folder `name` containing nodes representing each subunit.
-
-==== LegalAsciiDoctor Platform
+NOTE: The GitLaw platform used to have separate JSON and adoc files respectively for node metadata and text.
+It now combines them in one file as described here.
 
 A node is represented by a `name.adoc` file, where name is the name of the node.
 Metadata are contained in the front-matter of the file.
