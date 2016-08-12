@@ -99,16 +99,20 @@
       <p>This section describes how repository nodes are structured in various platforms in development.</p>
       </div>
       <div class="sect3">
-      <h4 id="_gitlaw_platform">GitLaw Platform</h4>
-      <div class="paragraph">
-      <p>A node is represented by a <code>name.json</code> file, where name is the name of the node.
-      Metadata are formatedd in JavaScript Object Notation (JSON).
-      If the section has text, it is contained in an accompanying <code>name.adoc</code> file.
-      If the section contains sub-units, they can either be included within the <code>name.adoc</code> file or a folder <code>name</code> containing nodes representing each subunit.</p>
+      <h4 id="_gitlaw_and_legalasciidoctor_platform">GitLaw and LegalAsciiDoctor Platform</h4>
+      <div class="admonitionblock note">
+      <table>
+      <tr>
+      <td class="icon">
+      <div class="title">Note</div>
+      </td>
+      <td class="content">
+      The GitLaw platform used to have separate JSON and adoc files respectively for node metadata and text.
+      It now combines them in one file as described here.
+      </td>
+      </tr>
+      </table>
       </div>
-      </div>
-      <div class="sect3">
-      <h4 id="_legalasciidoctor_platform">LegalAsciiDoctor Platform</h4>
       <div class="paragraph">
       <p>A node is represented by a <code>name.adoc</code> file, where name is the name of the node.
       Metadata are contained in the front-matter of the file.
